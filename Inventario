@@ -4,131 +4,115 @@
 //o sistema deve ler o arquivo invetario_loja.csv e exibir a lista de todos os produtos cadastrados
 //permitir que o usuário saia do programa
 
-#include<stdio.h>
-#include<stdlib.h>
-#include<string.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 
 #define MAX_NAME_LENGTH 50
 #define FILE_CSV "inventario_loja.csv"
 
-typedef struct{
+typedef struct {
     char nome[MAX_NAME_LENGTH];
     int quantidade;
     float preco;
-    
 } Produto;
 
- void cadastrar_produto() {
+void cadastrar_produto() {
     Produto produto;
     
     printf("Digite o nome do produto: ");
     scanf("%s", produto.nome);
     printf("Digite a quantidade do produto: ");
-    scanf("%d",&produto.quantidade);
+    scanf("%d", &produto.quantidade);
     printf("Digite o preço do produto: ");
-    scanf("%f",&produto.preco);
-    
+    scanf("%f", &produto.preco);
 
-    FILE*file = fopen(FILE_CSV, "a"); //abre o arquivo csv em modo append para adcionar os dados no final do arquivo
-    if (file == NULL);
-        printf("Erro ao abrir o arquivo. \n");
+    FILE *file = fopen(FILE_CSV, "a"); // Abre o arquivo CSV em modo append
+    if (file == NULL) {
+        printf("Erro ao abrir o arquivo.\n");
         return;
     }
 
-    fprintf(file, "%s,%d,%.2f\n", produto.nome, produto.quantidade, produto.preco); //para retornar o valor negativo se ocasionar erro de saída
+    fprintf(file, "%s,%d,%.2f\n", produto.nome, produto.quantidade, produto.preco);
     fclose(file);
     printf("Produto cadastrado com sucesso!\n");
-
 }
 
-void mostrar_produto(){
-    FILE *file = ofopen(CSV_FILE,"r");
-    if (file == NULL){
-        printf("Nenhum Produto cadastrado. \n");
+void mostrar_produto() {
+    FILE *file = fopen(FILE_CSV, "r");
+    if (file == NULL) {
+        printf("Nenhum produto cadastrado.\n");
         return;
-        
     }
-    
+
     char linha[300];
-    printf("\nLista dos pordutos cadastrados:\n");
-    while (fgets(linha, sizeof(linha),file)){   //funcao para ler cada linha do arquivo e imprimir os dados
+    printf("\nLista dos produtos cadastrados:\n");
+    while (fgets(linha, sizeof(linha), file)) {
         printf("%s", linha);
     }
-    
+
     fclose(file);
-    
 }
 
-void consultar_produto(){
-    char nome[MAX_PRODUTO_LENGTH];
+void consultar_produto() {
+    char nome[MAX_NAME_LENGTH];
     printf("Digite o nome do produto que deseja consultar: ");
     scanf("%s", nome);
     
-    FILE *file = fopen(CSV_FILE,"r");
-    if(file ==NULL){
-        printf("Nnehum produtro cadastrado.");
+    FILE *file = fopen(FILE_CSV, "r");
+    if (file == NULL) {
+        printf("Nenhum produto cadastrado.\n");
         return;
     }
-    
-char linha[300];
-int encontrar = 0;
-while (fgets(linha, sizeof(linha),file)){
-    char nome_produto[MAX_PRODUTO_LENGTH];
-    sscanf(linha, "%[^,],", nome_produto); //funcao para ler linha por linha e extrair o nome do produto
-    if(strcmp(nome_produto, nome)==0){  //para comparar o nome inserido pelo usuario com o nome do produto
-        printf("Produto encontrado: %s", linha);
-        encontrar =1;
-        break;
+
+    char linha[300];
+    int encontrar = 0;
+    while (fgets(linha, sizeof(linha), file)) {
+        char nome_produto[MAX_NAME_LENGTH];
+        sscanf(linha, "%[^,],", nome_produto); // Extrai o nome do produto da linha
+        if (strcmp(nome_produto, nome) == 0) {
+            printf("Produto encontrado: %s", linha);
+            encontrar = 1;
+            break;
+        }
     }
-}
 
-if (encontrar){
-    printf("Produto não encontrado.\n");
-
+    if (!encontrar) {
+        printf("Produto não encontrado.\n");
     }
 
     fclose(file);
-
 }
 
-int main(){
+int main() {
     int escolha;
     
-    while(1){
-        printf("---------Bem vindo ao Sistema de Inventário da Juju!---------"):
-        printf("\n\nEscolha uma opção:");
-        scanf("%d", &escolha);
+    while (1) {
+        printf("---------Bem vindo ao Sistema de Inventário da Juju!---------\n");
+        printf("\nEscolha uma opção:\n");
         printf("1. Cadastrar produto.\n");
         printf("2. Ler produtos.\n");
         printf("3. Consultar produto.\n");
-        printf("4.Sair.\n");
+        printf("4. Sair.\n");
+        scanf("%d", &escolha);
         
-        switch(escolha){
-          case 1:
-            cadastrar_produto();
-            break;
-            
-          case 2:
-            mostrar_produto();
-            break;
-            
-          case 3:
-            consultar_produto();
-            break;
-            
-          case 4:
-            printf("Saindo do sistema... \n");
-            return 0;
-          default:
-            printf("Opção inválida! Tente novamente.\n");
-
+        switch (escolha) {
+            case 1:
+                cadastrar_produto();
+                break;
+            case 2:
+                mostrar_produto();
+                break;
+            case 3:
+                consultar_produto();
+                break;
+            case 4:
+                printf("Saindo do sistema...\n");
+                return 0;
+            default:
+                printf("Opção inválida! Tente novamente.\n");
         }
-        
-        
     }
     
     return 0;
 }
-    
-
-
